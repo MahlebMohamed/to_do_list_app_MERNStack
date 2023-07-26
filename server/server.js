@@ -5,14 +5,14 @@ const dbConnection = require('./config/database');
 const noteRouter = require('./routes/NoteRoute');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 
 dbConnection();
 
 
-app.use('/api/note', noteRouter)
+app.use('/api/notes', noteRouter)
 
 app.get('*', (request, response) => {
     response.sendStatus("404")
