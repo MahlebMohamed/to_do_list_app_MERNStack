@@ -7,9 +7,11 @@ const noteRouter = require('./routes/NoteRoute');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-app.use(express.json());
 
 dbConnection();
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 
 app.use('/api/notes', noteRouter)

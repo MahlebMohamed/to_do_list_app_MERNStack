@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+
 
 function Notes() {
     const baseURL = `${import.meta.env.VITE_SERVER_URL}/api/notes`;
@@ -7,30 +9,57 @@ function Notes() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await fetch(baseURL);
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
-                }
-                const data = response.json();
-                setData(data);
-                setLoading(false);
-            } catch (error) {
-                setError("Error fetching data");
-                setLoading(false);
-            }
+        function fetchData() {
+            fetch(baseURL)
+                .then((response => {
+                    return response.json()
+                }))
+                .then((data) => {
+                    console.log(data);
+                    setData(data);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    setError("Error fetching data");
+                    setLoading(false);
+                })
         }
 
-        // fetchData();
+        fetchData();
     }, []);
 
 
 
     return (
         <div>
-            Notes
+            <pre>
+                {
+                    loading ? (<p>Loading...</p>) : error ? (<p> {error} </p>) : (
+                        <ul className='notes'>
+                            {
+                                data.map((item) => {
+                                    return (
+                                        <li key={item._id}>
+                                            <Link to={`/note/${item._id}`}>
+                                                <h3>{item.title}</h3>
+                                                <p>
+                                                    {
+                                                        item.description.lenght > 50 ? (
+                                                            item.description.substring(0, 50) + '...'
+                                                        ) : (
+                                                            item.description
+                                                        )
+                                                    }
+                                                </p>
+                                            </Link>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    )
+                }
+            </pre>
         </div>
     )
 }
