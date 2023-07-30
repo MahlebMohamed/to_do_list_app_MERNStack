@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function Notes() {
@@ -15,7 +15,6 @@ function Notes() {
                     return response.json()
                 }))
                 .then((data) => {
-                    console.log(data);
                     setData(data);
                     setLoading(false);
                 })
@@ -32,33 +31,37 @@ function Notes() {
 
     return (
         <div>
+
             <pre>
-                {
-                    loading ? (<p>Loading...</p>) : error ? (<p> {error} </p>) : (
-                        <ul className='notes'>
-                            {
-                                data.map((item) => {
-                                    return (
-                                        <li key={item._id}>
-                                            <Link to={`/note/${item._id}`}>
-                                                <h3>{item.title}</h3>
-                                                <p>
-                                                    {
-                                                        item.description.lenght > 50 ? (
-                                                            item.description.substring(0, 50) + '...'
-                                                        ) : (
-                                                            item.description
-                                                        )
-                                                    }
-                                                </p>
-                                            </Link>
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
-                    )
-                }
+                {loading ? (<p>Loading...</p>) : error ? (<p> {error} </p>) : (
+                    <ul className='notes'>
+
+                        <li className='add-note-botton'>
+                            <Link to={`/add-note`}>+</Link>
+                        </li>
+
+                        {
+                            data.map((item) => {
+                                return (
+                                    <li key={item._id}>
+                                        <Link to={`/note/${item._id}`}>
+                                            <h3>{item.title}</h3>
+                                            <p>
+                                                {
+                                                    item.description.lenght > 50 ? (
+                                                        item.description.substring(0, 50) + '...'
+                                                    ) : (
+                                                        item.description
+                                                    )
+                                                }
+                                            </p>
+                                        </Link>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+                )}
             </pre>
         </div>
     )
